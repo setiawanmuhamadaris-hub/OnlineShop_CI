@@ -6,6 +6,17 @@ class Home extends BaseController
 {
     public function index(): string
     {
-        return view('welcome_message');
+        return view('v_home');
     }
+
+    public function produk(): string
+    {
+        return view('v_produk');
+    }
+
+    public function keranjang(): string
+    {
+        return view('v_keranjang');
+    }
+
 }
