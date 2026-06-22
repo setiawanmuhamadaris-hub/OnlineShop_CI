@@ -8,7 +8,9 @@ class Home extends BaseController
 {
     protected $productModel;
     function __construct(){
+    helper(['number', 'form']);    
     $this->productModel = new ProductModel();
+    
     }
 
     public function index(): string
