@@ -1,0 +1,93 @@
+@baseUrl = http://localhost:8080
+@contentType = application/json
+
+### ==========================================
+### GET semua produk
+### ==========================================
+GET {{baseUrl}}/api/products
+Accept: application/json
+
+###
+
+### ==========================================
+### GET produk by ID (ganti ID sesuai data)
+### ==========================================
+GET {{baseUrl}}/api/products/1
+Accept: application/json
+
+###
+
+### ==========================================
+### POST - Tambah produk baru
+### ==========================================
+POST {{baseUrl}}/api/products
+Content-Type: {{contentType}}
+Accept: application/json
+
+{
+    "nama": "Produk Test REST",
+    "harga": 75000,
+    "jumlah": 20,
+    "foto": "test.jpg"
+}
+
+###
+
+### ==========================================
+### POST - Validasi gagal (nama kurang dari 3 karakter)
+### ==========================================
+POST {{baseUrl}}/api/products
+Content-Type: {{contentType}}
+Accept: application/json
+
+{
+    "nama": "AB",
+    "harga": 75000,
+    "jumlah": 20
+}
+
+###
+
+### ==========================================
+### PUT - Update seluruh data produk by ID
+### ==========================================
+PUT {{baseUrl}}/api/products/1
+Content-Type: {{contentType}}
+Accept: application/json
+
+{
+    "nama": "Produk Diupdate",
+    "harga": 99000,
+    "jumlah": 15
+}
+
+###
+
+### ==========================================
+### PATCH - Update sebagian data (partial update)
+### ==========================================
+PATCH {{baseUrl}}/api/products/1
+Content-Type: {{contentType}}
+Accept: application/json
+
+{
+    "harga": 120000
+}
+
+###
+
+### ==========================================
+### DELETE - Hapus produk by ID (soft delete)
+### ==========================================
+DELETE {{baseUrl}}/api/products/1
+Accept: application/json
+
+###
+
+### ==========================================
+### GET produk yang sudah dihapus (harusnya 404)
+### ==========================================
+GET {{baseUrl}}/api/products/1
+Accept: application/json
+
+###
