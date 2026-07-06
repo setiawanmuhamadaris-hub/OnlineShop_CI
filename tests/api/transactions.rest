@@ -1,0 +1,81 @@
+@baseUrl = http://localhost:8080
+@contentType = application/json
+
+### ==========================================
+### GET semua transaksi (beserta detail produk)
+### ==========================================
+GET {{baseUrl}}/api/transactions
+Accept: application/json
+
+###
+
+### ==========================================
+### GET transaksi by ID (ganti ID sesuai data)
+### ==========================================
+GET {{baseUrl}}/api/transactions/1
+Accept: application/json
+
+###
+
+### ==========================================
+### PATCH - Update status transaksi jadi selesai (1)
+### ==========================================
+PATCH {{baseUrl}}/api/transactions/1
+Content-Type: {{contentType}}
+Accept: application/json
+
+{
+    "status": "1"
+}
+
+###
+
+### ==========================================
+### PATCH - Update alamat transaksi
+### ==========================================
+PATCH {{baseUrl}}/api/transactions/1
+Content-Type: {{contentType}}
+Accept: application/json
+
+{
+    "alamat": "Jl. Merdeka No. 99, Jakarta Pusat"
+}
+
+###
+
+### ==========================================
+### PATCH - Validasi gagal (status tidak valid)
+### ==========================================
+PATCH {{baseUrl}}/api/transactions/1
+Content-Type: {{contentType}}
+Accept: application/json
+
+{
+    "status": "5"
+}
+
+###
+
+### ==========================================
+### GET transaksi yang tidak ada (expect 404)
+### ==========================================
+GET {{baseUrl}}/api/transactions/999
+Accept: application/json
+
+###
+
+### ==========================================
+### DELETE - Hapus transaksi by ID (soft delete)
+### ==========================================
+DELETE {{baseUrl}}/api/transactions/1
+Accept: application/json
+
+###
+
+### ==========================================
+### GET transaksi ID 1 setelah dihapus (expect 404)
+### ==========================================
+GET {{baseUrl}}/api/transactions/1
+Accept: application/json
+
+###
