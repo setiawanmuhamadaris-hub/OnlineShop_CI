@@ -8,10 +8,12 @@ use App\Services\RajaOngkirService;
 
 use App\Models\TransactionModel;
 use App\Models\TransactionDetailModel;
+use App\Models\DiscountModel;
 
 class TransaksiController extends BaseController
 {
     protected $cart;
+    protected $discountModel;
 
     public function __construct()
     {
@@ -19,13 +21,28 @@ class TransaksiController extends BaseController
         $this->cart = service('cart');
         $this->transactionModel = new TransactionModel();
         $this->transactionDetailModel = new TransactionDetailModel(); 
+        $this->discountModel = new DiscountModel();
     }
 
     public function index()
     {  
+        $discount = $this->discountModel->getTodayDiscount();
+        $discountNominal = $discount ? $discount['nominal'] : 0;
+
+        $items = $this->cart->contents();
+        $total = 0;
+
+        foreach ($items as &$item) {
+            $item['discount'] = $discountNominal;
+            $item['discounted_price'] = max(0, $item['price'] - $discountNominal);
+            $item['discounted_subtotal'] = $item['discounted_price'] * $item['qty'];
+            $total += $item['discounted_subtotal'];
+        }
+
         $data = [
-            'items' => $this->cart->contents(),
-            'total' => $this->cart->total() 
+            'items' => $items,
+            'total' => $total,
+            'discount' => $discount,
         ];
 
         return view('v_keranjang', $data);
@@ -99,9 +116,23 @@ class TransaksiController extends BaseController
 
     public function checkout()
     {  
+        $discount = $this->discountModel->getTodayDiscount();
+        $discountNominal = $discount ? $discount['nominal'] : 0;
+
+        $items = $this->cart->contents();
+        $total = 0;
+
+        foreach ($items as &$item) {
+            $item['discount'] = $discountNominal;
+            $item['discounted_price'] = max(0, $item['price'] - $discountNominal);
+            $item['discounted_subtotal'] = $item['discounted_price'] * $item['qty'];
+            $total += $item['discounted_subtotal'];
+        }
+
         $data = [
-            'items' => $this->cart->contents(),
-            'total' => $this->cart->total() 
+            'items' => $items,
+            'total' => $total,
+            'discount' => $discount,
         ];
 
         return view('v_checkout', $data);
@@ -168,12 +199,17 @@ class TransaksiController extends BaseController
             return redirect()->back();
         }
 
+        // Get today's discount
+        $discount = $this->discountModel->getTodayDiscount();
+        $discountNominal = $discount ? $discount['nominal'] : 0;
+
         $db = \Config\Database::connect();
         $db->transStart(); 
 
         $subtotal = 0;
         foreach ($cartItems as $item) {
-            $subtotal += $item['qty'] * $item['price'];
+            $discountedPrice = max(0, $item['price'] - $discountNominal);
+            $subtotal += $item['qty'] * $discountedPrice;
         }
 
         $ongkir = (int) $this->request->getPost('ongkir');
@@ -194,14 +230,15 @@ class TransaksiController extends BaseController
 
         $transactionId = $this->transactionModel->getInsertID();
 
-        // insert transaction detail
+        // insert transaction detail with discount
         foreach ($cartItems as $item) {
+            $discountedPrice = max(0, $item['price'] - $discountNominal);
             $this->transactionDetailModel->insert([
                 'transaction_id' => $transactionId,
                 'product_id'     => $item['id'],
                 'jumlah'         => $item['qty'],
-                'diskon'         => 0,
-                'subtotal_harga' => $item['qty'] * $item['price'] 
+                'diskon'         => $discountNominal,
+                'subtotal_harga' => $item['qty'] * $discountedPrice 
             ]);
         }
 

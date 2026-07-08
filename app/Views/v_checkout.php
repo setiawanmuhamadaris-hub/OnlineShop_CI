@@ -54,6 +54,13 @@
     <?= form_close() ?> 
         </div>
     <div class="col-lg-6">
+
+        <?php if (!empty($discount)) : ?>
+            <div class="alert alert-warning">
+                <i class="bi bi-percent"></i> Diskon aktif: <strong>IDR <?= number_format($discount['nominal'], 0, ',', '.') ?></strong> per item
+            </div>
+        <?php endif; ?>
+
         <table class="table">
             <thead>
                 <tr>
@@ -70,9 +77,16 @@
                 ?>
                         <tr>
                             <td><?= $item['name'] ?></td>
-                            <td><?= number_to_currency($item['price'], 'IDR') ?></td>
+                            <td>
+                                <?php if (!empty($discount)) : ?>
+                                    <span style="text-decoration: line-through; color: red;"><?= number_to_currency($item['price'], 'IDR') ?></span><br>
+                                    <span class="text-success"><?= number_to_currency($item['discounted_price'], 'IDR') ?></span>
+                                <?php else : ?>
+                                    <?= number_to_currency($item['price'], 'IDR') ?>
+                                <?php endif; ?>
+                            </td>
                             <td><?= $item['qty'] ?></td>
-                            <td><?= number_to_currency($item['price'] * $item['qty'], 'IDR') ?></td>
+                            <td><?= number_to_currency($item['discounted_subtotal'], 'IDR') ?></td>
                         </tr>
                 <?php
                     endforeach;

@@ -36,5 +36,20 @@ $routes->get('history', 'TransaksiController::history', ['filter' => 'auth']);
 $routes->get('ajax/destinations','TransaksiController::destinations', ['filter' => 'auth']);
 $routes->get('ajax/costs','TransaksiController::costs', ['filter' => 'auth']);
 
+// Diskon routes (admin only)
+$routes->group('diskon', ['filter' => 'auth'], function ($routes) {
+    $routes->get('', 'DiskonController::index');
+    $routes->post('', 'DiskonController::create');
+    $routes->post('edit/(:any)', 'DiskonController::edit/$1');
+    $routes->get('delete/(:any)', 'DiskonController::delete/$1');
+});
+
+// Pembelian routes (admin only)
+$routes->group('pembelian', ['filter' => 'auth'], function ($routes) {
+    $routes->get('', 'PembelianController::index');
+    $routes->get('updateStatus/(:any)', 'PembelianController::updateStatus/$1');
+});
+
 $routes->resource('api/products', ['controller' => 'Api\ProdukController']);
 $routes->resource('api/transactions', ['controller' => 'Api\TransaksiController', 'only' => ['index', 'show', 'update', 'delete']]);
+$routes->resource('api/discounts', ['controller' => 'Api\DiskonController']);

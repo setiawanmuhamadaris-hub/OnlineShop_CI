@@ -1,69 +1,81 @@
-# CodeIgniter 4 Application Starter
+# Toko Online - CodeIgniter 4 (UAS Pemrograman Web Lanjut)
 
-## What is CodeIgniter?
+Aplikasi Toko Online berbasis **CodeIgniter 4** yang dilengkapi dengan fitur manajemen produk, keranjang belanja, integrasi ongkir otomatis (RajaOngkir), manajemen diskon, serta RESTful API. Proyek ini dikerjakan untuk memenuhi Ujian Akhir Semester (UAS) mata kuliah Pemrograman Web Lanjut.
 
-CodeIgniter is a PHP full-stack web framework that is light, fast, flexible and secure.
-More information can be found at the [official site](https://codeigniter.com).
+## 🚀 Fitur Utama
+- **Autentikasi User & Admin** (Login/Logout)
+- **Katalog Produk** (Admin CRUD & Tampilan Home)
+- **Keranjang Belanja (Cart) & Checkout**
+- **Integrasi RajaOngkir** (Cek ongkos kirim otomatis)
+- **Manajemen Diskon (New!)** 
+  - CRUD diskon (Admin only) dengan validasi tanggal unik.
+  - Tampilan otomatis harga coret dan badge diskon di frontend.
+  - Perhitungan otomatis pemotongan harga di keranjang dan checkout.
+- **Manajemen Pembelian (New!)** 
+  - Admin dapat memantau seluruh transaksi dan mengubah status pesanan.
+- **RESTful Webservice API** 
+  - Endpoint API untuk Produk (`/api/products`)
+  - Endpoint API untuk Diskon (`/api/discounts`)
+  - Endpoint API untuk Transaksi (`/api/transactions`)
 
-This repository holds a composer-installable app starter.
-It has been built from the
-[development repository](https://github.com/codeigniter4/CodeIgniter4).
+## 🛠️ Persyaratan Sistem
+- PHP >= 8.1
+- MySQL / MariaDB
+- Composer
+- Ekstensi PHP: `intl`, `mbstring`, `json`, `curl`
 
-More information about the plans for version 4 can be found in [CodeIgniter 4](https://forum.codeigniter.com/forumdisplay.php?fid=28) on the forums.
+## ⚙️ Instalasi dan Setup
 
-You can read the [user guide](https://codeigniter.com/user_guide/)
-corresponding to the latest version of the framework.
+1. **Clone repository ini**
+   ```bash
+   git clone <url-repo-anda>
+   cd belajar-ci
+   ```
 
-## Installation & updates
+2. **Install Dependencies**
+   ```bash
+   composer install
+   ```
 
-`composer create-project codeigniter4/appstarter` then `composer update` whenever
-there is a new release of the framework.
+3. **Konfigurasi Environment (.env)**
+   - Copy file `env` menjadi `.env`:
+     ```bash
+     cp env .env
+     ```
+   - Buka file `.env` dan atur konfigurasi database, pastikan Anda juga sudah membuat database (misalnya `ci4`) di MySQL Anda:
+     ```env
+     database.default.hostname = localhost
+     database.default.database = ci4
+     database.default.username = root
+     database.default.password = 
+     database.default.DBDriver = MySQLi
+     ```
 
-When updating, check the release notes to see if there are any changes you might need to apply
-to your `app` folder. The affected files can be copied or merged from
-`vendor/codeigniter4/framework/app`.
+4. **Jalankan Migrasi & Seeder**
+   Untuk membuat seluruh tabel dan mengisi data dummy (User, Product, Discount):
+   ```bash
+   php spark migrate
+   php spark db:seed UserSeeder
+   php spark db:seed ProductSeeder
+   php spark db:seed DiscountSeeder
+   ```
 
-## Setup
+5. **Jalankan Server Lokal**
+   ```bash
+   php spark serve
+   ```
+   Aplikasi dapat diakses melalui `http://localhost:8080`
 
-Copy `env` to `.env` and tailor for your app, specifically the baseURL
-and any database settings.
+## 🧪 Testing REST API
+Project ini menyediakan file `.rest` yang bisa digunakan dengan ekstensi **REST Client** di VS Code untuk menguji API secara langsung:
+- `tests/api/products.rest` (CRUD Produk)
+- `tests/api/discount.rest` (CRUD Diskon)
+- `tests/api/transactions.rest` (Transaksi)
+- `tests/api/destinations.rest` (Ongkir)
 
-## Important Change with index.php
+## 👤 Akun Default (Admin)
+- **Username**: aris (sesuaikan dengan data `UserSeeder`)
+- **Password**: admin123 (sesuaikan dengan `UserSeeder`)
+- **Role**: Admin
 
-`index.php` is no longer in the root of the project! It has been moved inside the *public* folder,
-for better security and separation of components.
-
-This means that you should configure your web server to "point" to your project's *public* folder, and
-not to the project root. A better practice would be to configure a virtual host to point there. A poor practice would be to point your web server to the project root and expect to enter *public/...*, as the rest of your logic and the
-framework are exposed.
-
-**Please** read the user guide for a better explanation of how CI4 works!
-
-## Repository Management
-
-We use GitHub issues, in our main repository, to track **BUGS** and to track approved **DEVELOPMENT** work packages.
-We use our [forum](http://forum.codeigniter.com) to provide SUPPORT and to discuss
-FEATURE REQUESTS.
-
-This repository is a "distribution" one, built by our release preparation script.
-Problems with it can be raised on our forum, or as issues in the main repository.
-
-## Server Requirements
-
-PHP version 8.2 or higher is required, with the following extensions installed:
-
-- [intl](http://php.net/manual/en/intl.requirements.php)
-- [mbstring](http://php.net/manual/en/mbstring.installation.php)
-
-> [!WARNING]
-> - The end of life date for PHP 7.4 was November 28, 2022.
-> - The end of life date for PHP 8.0 was November 26, 2023.
-> - The end of life date for PHP 8.1 was December 31, 2025.
-> - If you are still using below PHP 8.2, you should upgrade immediately.
-> - The end of life date for PHP 8.2 will be December 31, 2026.
-
-Additionally, make sure that the following extensions are enabled in your PHP:
-
-- json (enabled by default - don't turn it off)
-- [mysqlnd](http://php.net/manual/en/mysqlnd.install.php) if you plan to use MySQL
-- [libcurl](http://php.net/manual/en/curl.requirements.php) if you plan to use the HTTP\CURLRequest library
+*(Silakan cek database atau `UserSeeder` jika login gagal untuk memastikan kredensial yang tepat).*

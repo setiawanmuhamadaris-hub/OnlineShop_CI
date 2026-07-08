@@ -1,0 +1,88 @@
+@baseUrl = http://localhost:8080
+@contentType = application/json
+
+### ==========================================
+### GET semua diskon
+### ==========================================
+GET {{baseUrl}}/api/discounts
+Accept: application/json
+
+###
+
+### ==========================================
+### GET diskon by ID (ganti ID sesuai data)
+### ==========================================
+GET {{baseUrl}}/api/discounts/1
+Accept: application/json
+
+###
+
+### ==========================================
+### POST - Tambah diskon baru
+### ==========================================
+POST {{baseUrl}}/api/discounts
+Content-Type: {{contentType}}
+Accept: application/json
+
+{
+    "tanggal": "2026-08-01",
+    "nominal": 50000
+}
+
+###
+
+### ==========================================
+### POST - Validasi gagal (tanggal sudah ada)
+### ==========================================
+POST {{baseUrl}}/api/discounts
+Content-Type: {{contentType}}
+Accept: application/json
+
+{
+    "tanggal": "2026-07-09",
+    "nominal": 30000
+}
+
+###
+
+### ==========================================
+### PUT - Update data diskon by ID
+### ==========================================
+PUT {{baseUrl}}/api/discounts/1
+Content-Type: {{contentType}}
+Accept: application/json
+
+{
+    "nominal": 99000
+}
+
+###
+
+### ==========================================
+### PATCH - Update sebagian data (partial update)
+### ==========================================
+PATCH {{baseUrl}}/api/discounts/1
+Content-Type: {{contentType}}
+Accept: application/json
+
+{
+    "nominal": 120000
+}
+
+###
+
+### ==========================================
+### DELETE - Hapus diskon by ID (soft delete)
+### ==========================================
+DELETE {{baseUrl}}/api/discounts/1
+Accept: application/json
+
+###
+
+### ==========================================
+### GET diskon yang sudah dihapus (harusnya 404)
+### ==========================================
+GET {{baseUrl}}/api/discounts/1
+Accept: application/json
+
+###

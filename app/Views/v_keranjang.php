@@ -9,7 +9,14 @@ if (session()->getFlashData('success')) {
     </div>
 <?php
 }
-?> 
+?>
+
+<?php if (!empty($discount)) : ?>
+    <div class="alert alert-warning">
+        <i class="bi bi-percent"></i> Diskon aktif hari ini: <strong>IDR <?= number_format($discount['nominal'], 0, ',', '.') ?></strong> per item
+    </div>
+<?php endif; ?>
+
 <?= form_open('keranjang/edit') ?>
 <!-- Table with stripped rows -->
 <table class="table datatable">
@@ -32,9 +39,16 @@ if (session()->getFlashData('success')) {
                 <tr>
                     <td><?= $item['name'] ?></td>
                     <td><img src="<?= base_url() . "img/" . $item['options']['foto'] ?>" width="100px"></td>
-                    <td><?= number_to_currency($item['price'], 'IDR') ?></td>
+                    <td>
+                        <?php if (!empty($discount)) : ?>
+                            <span style="text-decoration: line-through; color: red;"><?= number_to_currency($item['price'], 'IDR') ?></span><br>
+                            <span class="text-success"><?= number_to_currency($item['discounted_price'], 'IDR') ?></span>
+                        <?php else : ?>
+                            <?= number_to_currency($item['price'], 'IDR') ?>
+                        <?php endif; ?>
+                    </td>
                     <td><input type="number" min="1" name="qty<?= $i++ ?>" class="form-control" value="<?= $item['qty'] ?>"></td>
-                    <td><?= number_to_currency($item['subtotal'], 'IDR') ?></td>
+                    <td><?= number_to_currency($item['discounted_subtotal'], 'IDR') ?></td>
                     <td>
                         <a href="<?= base_url('keranjang/delete/' . $item['rowid'] . '') ?>" class="btn btn-danger"><i class="bi bi-trash"></i></a>
                     </td>
