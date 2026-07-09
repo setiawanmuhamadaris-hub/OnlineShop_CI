@@ -1,4 +1,4 @@
-# Toko Online - CodeIgniter 4 (UAS Pemrograman Web Lanjut)
+# Toko Online - CodeIgniter 4 (Pemrograman Web Lanjut)
 
 Aplikasi Toko Online berbasis **CodeIgniter 4** yang dilengkapi dengan fitur manajemen produk, keranjang belanja, integrasi ongkir otomatis (RajaOngkir), manajemen diskon, serta RESTful API. Proyek ini dikerjakan untuk memenuhi Ujian Akhir Semester (UAS) mata kuliah Pemrograman Web Lanjut.
 
